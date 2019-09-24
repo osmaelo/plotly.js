@@ -6,7 +6,7 @@
             "lighting": {
                 "facenormalsepsilon": 0
             },
-            "opacity": 0.2,
+            "opacity": 0.1,
             "opacityscale": "extremes",
             "colorscale": "Blackbody",
             "reversescale": true,
@@ -776,7 +776,7 @@
             "lighting": {
                 "facenormalsepsilon": 0
             },
-            "opacity": 0.2,
+            "opacity": 0.1,
             "opacityscale": "max",
             "colorscale": "Portland",
             "reversescale": false,
