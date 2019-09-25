@@ -491,20 +491,8 @@ exports.formatSliceLabel = function(pt, entry, trace, cd, fullLayout) {
     var isRoot = helpers.isHierarchyRoot(pt);
     var isEntry = helpers.isEntry(pt);
 
-    var rootLabel = hierarchy.data.data.pid;
-
-    var parent;
-    var parentLabel;
-    var parentValue;
-    if(isEntry) {
-        parent = pt.data.parent;
-        parentLabel = parent ? parent.data.label : helpers.getPtLabel(hierarchy);
-        parentValue = parent ? helpers.getVal(parent.data) : helpers.getVal(hierarchy);
-    } else {
-        parent = pt.parent;
-        parentLabel = helpers.getPtLabel(parent);
-        parentValue = helpers.getVal(parent);
-    }
+    var parent = isRoot ? hierarchy : isEntry ? pt.data.parent.data : pt.parent;
+    var parentLabel = isRoot ? helpers.getPtLabel(hierarchy) : isEntry ? parent.label : helpers.getPtLabel(parent);
 
     var val = helpers.getVal(cdi);
 
@@ -543,7 +531,7 @@ exports.formatSliceLabel = function(pt, entry, trace, cd, fullLayout) {
                 };
 
                 if(hasFlag('percent parent')) {
-                    percent = val / parentValue;
+                    percent = val / helpers.getVal(parent);
                     addPercent('parent');
                 }
                 if(hasFlag('percent entry')) {
@@ -576,23 +564,23 @@ exports.formatSliceLabel = function(pt, entry, trace, cd, fullLayout) {
 
     obj.currentPath = helpers.getPath(pt.data);
 
-    obj.percentParent = val / parentValue;
+    obj.percentParent = val / helpers.getVal(parent);
     obj.percentParentLabel = helpers.formatPercent(
         obj.percentParent, separators
     );
-    obj.parent = helpers.replaceVoid(parentLabel, rootLabel);
+    obj.parent = helpers.handleRoot(parentLabel);
 
     obj.percentEntry = val / helpers.getVal(entry);
     obj.percentEntryLabel = helpers.formatPercent(
         obj.percentEntry, separators
     );
-    obj.entry = helpers.replaceVoid(helpers.getPtLabel(entry), rootLabel);
+    obj.entry = helpers.handleRoot(helpers.getPtLabel(entry));
 
     obj.percentRoot = val / helpers.getVal(hierarchy);
     obj.percentRootLabel = helpers.formatPercent(
         obj.percentRoot, separators
     );
-    obj.root = helpers.replaceVoid(helpers.getPtLabel(hierarchy), rootLabel);
+    obj.root = helpers.handleRoot(helpers.getPtLabel(hierarchy));
 
     if(cdi.hasOwnProperty('color')) {
         obj.color = cdi.color;

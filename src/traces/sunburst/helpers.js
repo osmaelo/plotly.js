@@ -61,8 +61,8 @@ exports.getPtLabel = function(pt) {
     return pt.data.data.label;
 };
 
-exports.replaceVoid = function(label, rootLabel) {
-    return label === undefined ? rootLabel : label;
+exports.handleRoot = function(label) {
+    return label !== undefined ? label : '';
 };
 
 exports.getVal = function(d) {
